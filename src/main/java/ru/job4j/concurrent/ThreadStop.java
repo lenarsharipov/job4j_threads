@@ -2,16 +2,23 @@ package ru.job4j.concurrent;
 
 public class ThreadStop {
     public static void main(String[] args) throws InterruptedException {
-        var thread = new Thread(
+        var progress = new Thread(
                 () -> {
-                    var count = 0;
                     while (!Thread.currentThread().isInterrupted()) {
-                        System.out.println(count++);
+                        try {
+                            System.out.println("start ...");
+                            Thread.sleep(10_000);
+                        } catch (InterruptedException e) {
+                            System.out.println(Thread.currentThread().isInterrupted());
+                            System.out.println(Thread.currentThread().getState());
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
         );
-        thread.start();
-        Thread.sleep(1000);
-        thread.interrupt();
+        progress.start();
+        Thread.sleep(1_000);
+        progress.interrupt();
+        progress.join();
     }
 }
