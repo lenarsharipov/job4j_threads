@@ -11,9 +11,10 @@ public class Wget implements Runnable {
     private final String output;
     private final int speed;
 
-    public Wget(String url, String output, int speed) {
+    public Wget(String url, String outputDir, int speed) {
         this.url = url;
-        this.output = Path.of(output, url.substring(url.lastIndexOf('/'))).toString();
+        var outputFileName = url.substring(url.lastIndexOf('/'));
+        this.output = Path.of(outputDir, outputFileName).toString();
         this.speed = speed;
     }
 
@@ -43,7 +44,7 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        if (args.length < 2) {
+        if (args.length < 3) {
             throw new IllegalArgumentException("Passed arguments incorrect");
         }
         var url = args[0];
