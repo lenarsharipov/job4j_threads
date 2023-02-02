@@ -7,17 +7,19 @@ import java.net.URL;
 
 public class Wget implements Runnable {
     private final String url;
+    private final String output;
     private final int speed;
 
-    public Wget(String url, int speed) {
+    public Wget(String url, String output, int speed) {
         this.url = url;
+        this.output = output;
         this.speed = speed;
     }
 
     @Override
     public void run() {
         try (var in = new BufferedInputStream(new URL(url).openStream());
-            var out = new FileOutputStream("src/main/java/ru/job4j/thread/output/test_pom.xml")) {
+            var out = new FileOutputStream(output)) {
             var dataBuffer = new byte[1024];
             int bytesRead;
             var bytes = 0;
@@ -44,8 +46,9 @@ public class Wget implements Runnable {
             throw new IllegalArgumentException("Passed arguments incorrect");
         }
         var url = args[0];
-        var speed = Integer.parseInt(args[1]);
-        var wget = new Thread(new Wget(url, speed));
+        var output = args[1];
+        var speed = Integer.parseInt(args[2]);
+        var wget = new Thread(new Wget(url, output, speed));
         wget.start();
         wget.join();
     }
