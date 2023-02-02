@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 
 public class Wget implements Runnable {
     private final String url;
@@ -12,7 +13,7 @@ public class Wget implements Runnable {
 
     public Wget(String url, String output, int speed) {
         this.url = url;
-        this.output = output;
+        this.output = Path.of(output, url.substring(url.lastIndexOf('/'))).toString();
         this.speed = speed;
     }
 
