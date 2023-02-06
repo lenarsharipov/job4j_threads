@@ -1,13 +1,10 @@
 package ru.job4j.ref;
 
-import net.jcip.annotations.NotThreadSafe;
-
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@NotThreadSafe
 public class UserCache {
     private final ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
     private final AtomicInteger id = new AtomicInteger();
@@ -29,4 +26,5 @@ public class UserCache {
                     return user; })
                 .collect(Collectors.toList());
     }
+
 }
