@@ -82,4 +82,5 @@ class AccountStorageTest {
         assertThat(firstAccount.amount()).isEqualTo(100);
         assertThat(secondAccount.amount()).isEqualTo(150);
     }
+
 }
