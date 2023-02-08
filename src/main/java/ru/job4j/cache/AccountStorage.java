@@ -41,8 +41,8 @@ public final class AccountStorage {
         var source = getById(fromId);
         var target = getById(toId);
         if (source.isPresent() && target.isPresent() && source.get().amount() >= amount) {
-            accounts.put(toId, Account.of(toId, accounts.get(toId).amount() + amount));
-            accounts.put(fromId, Account.of(fromId, accounts.get(fromId).amount() - amount));
+            accounts.put(toId, Account.of(toId, target.get().amount() + amount));
+            accounts.put(fromId, Account.of(fromId, source.get().amount() - amount));
             rsl = true;
         }
         return rsl;
