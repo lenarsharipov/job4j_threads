@@ -38,9 +38,9 @@ public final class AccountStorage {
     @GuardedBy("accounts")
     public synchronized boolean transfer(int fromId, int toId, int amount) {
         var rsl = false;
-        if (getById(fromId).isPresent()
-                && getById(toId).isPresent()
-                && getById(fromId).get().amount() >= amount) {
+        var source = getById(fromId);
+        var target = getById(toId);
+        if (source.isPresent() && target.isPresent() && source.get().amount() >= amount) {
             accounts.put(toId, Account.of(toId, accounts.get(toId).amount() + amount));
             accounts.put(fromId, Account.of(fromId, accounts.get(fromId).amount() - amount));
             rsl = true;
