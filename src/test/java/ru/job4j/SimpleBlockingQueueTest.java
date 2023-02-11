@@ -10,11 +10,23 @@ class SimpleBlockingQueueTest {
     public void whenExecute2ThreadsThenPoll2() throws InterruptedException {
         var queue = new SimpleBlockingQueue<Integer>(4);
         var producer = new Thread(() -> {
-            queue.offer(1);
-            queue.offer(2);
-            queue.offer(3);
+            try {
+                queue.offer(1);
+                queue.offer(2);
+                queue.offer(3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         });
-        var consumer = new Thread(queue::poll);
+        var consumer = new Thread(() -> {
+            try {
+                queue.poll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+        });
         producer.start();
         consumer.start();
         producer.join();
@@ -26,16 +38,26 @@ class SimpleBlockingQueueTest {
     public void whenExecute2ThreadsThenPoll4() throws InterruptedException {
         var queue = new SimpleBlockingQueue<Integer>(4);
         var producer = new Thread(() -> {
-            queue.offer(1);
-            queue.offer(2);
-            queue.offer(3);
-            queue.offer(4);
-            queue.offer(5);
+            try {
+                queue.offer(1);
+                queue.offer(2);
+                queue.offer(3);
+                queue.offer(4);
+                queue.offer(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         });
         var consumer = new Thread(() -> {
-            queue.poll();
-            queue.poll();
-            queue.poll();
+            try {
+                queue.poll();
+                queue.poll();
+                queue.poll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         });
         producer.start();
         consumer.start();
@@ -48,19 +70,27 @@ class SimpleBlockingQueueTest {
     public void whenExecute2ThreadsThenPoll5() throws InterruptedException {
         var queue = new SimpleBlockingQueue<Integer>(4);
         var producer = new Thread(() -> {
-            queue.offer(1);
-            queue.offer(2);
-            queue.offer(3);
-            queue.offer(4);
-            queue.offer(5);
-
+            try {
+                queue.offer(1);
+                queue.offer(2);
+                queue.offer(3);
+                queue.offer(4);
+                queue.offer(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         });
         var consumer = new Thread(() -> {
-            queue.poll();
-            queue.poll();
-            queue.poll();
-            queue.poll();
-
+            try {
+                queue.poll();
+                queue.poll();
+                queue.poll();
+                queue.poll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         });
         producer.start();
         consumer.start();

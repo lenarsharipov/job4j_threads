@@ -23,6 +23,10 @@ import java.util.Queue;
 public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private final Queue<T> queue = new LinkedList<>();
+
+    /**
+     * Размер очереди, задается в конструкторе при создании объекта.
+     */
     private final int capacity;
 
     public SimpleBlockingQueue(int capacity) {
@@ -35,14 +39,10 @@ public class SimpleBlockingQueue<T> {
      * то текущая нить переходит в состояние ожидания.
      * @param value добавляемое значение.
      */
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException {
         synchronized (this) {
             while (queue.size() == capacity) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                wait();
             }
             queue.offer(value);
             notifyAll();
@@ -54,17 +54,14 @@ public class SimpleBlockingQueue<T> {
      * Если в коллекции объектов нет, то текущая нить переходит в состояние ожидания.
      * @return value
      */
-    public T poll() {
+    public T poll() throws InterruptedException {
         synchronized (this) {
             while (queue.size() == 0) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                wait();
             }
+            T result = queue.poll();
             notifyAll();
-            return queue.poll();
+            return  result;
         }
     }
 }
