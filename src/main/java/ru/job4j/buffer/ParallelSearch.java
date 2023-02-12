@@ -17,7 +17,7 @@ public class ParallelSearch {
         var queue = new SimpleBlockingQueue<>(10);
         final Thread consumer = new Thread(
                 () -> {
-                    while (!Thread.currentThread().isInterrupted()) {
+                    while (!queue.isEmpty() || !Thread.currentThread().isInterrupted()) {
                         try {
                             System.out.println(queue.poll());
                         } catch (InterruptedException e) {
@@ -43,5 +43,6 @@ public class ParallelSearch {
         producer.start();
         producer.join();
         consumer.interrupt();
+        consumer.join();
     }
 }
