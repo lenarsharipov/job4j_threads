@@ -52,7 +52,7 @@ public class SimpleBlockingQueue<T> {
     /**
      * Метод poll() возвращает объект из внутренней коллекции.
      * Если в коллекции объектов нет, то текущая нить переходит в состояние ожидания.
-     * @return value
+     * @return первый объект в очереди.
      */
     public T poll() throws InterruptedException {
         synchronized (this) {
@@ -64,4 +64,15 @@ public class SimpleBlockingQueue<T> {
             return  result;
         }
     }
+
+    /**
+     * @return значение true, при пустой очереди, либо false,
+     * если в очереди есть хотя бы один элемент.
+     */
+    public boolean isEmpty() {
+        synchronized (this) {
+            return queue.isEmpty();
+        }
+    }
+
 }
