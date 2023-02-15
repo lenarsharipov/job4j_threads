@@ -21,7 +21,7 @@ public class Cache {
     /**
      * Перед обновлением данных проверяется поле version.
      * Если version у модели и в кеше одинаковы, то можно обновить.
-     * Если нет, то выбросить OptimisticException.
+     * Если нет, то выброситься OptimisticException.
      * Перед обновлением данных необходимо проверять текущую версию
      * и ту что обновляем и увеличивать на единицу каждый раз,
      * когда произошло обновление. Если версии не равны - кидать исключение.
@@ -31,14 +31,11 @@ public class Cache {
      */
     public boolean update(Base model) {
         return memory.computeIfPresent(
-                model.getId(), (key, value) -> {
-                    int id = model.getId();
-                    int version = model.getVersion();
-                    Base stored = memory.get(id);
-                    if (stored.getVersion() != version) {
+                model.getId(), (key, oldVal) -> {
+                    if (model.getVersion() != oldVal.getVersion()) {
                         throw new OptimisticException("Versions are not equal");
                     }
-                    Base updated = new Base(id, version + 1);
+                    Base updated = new Base(model.getId(), model.getVersion() + 1);
                     updated.setName(model.getName());
                     return updated;
         }) != null;
