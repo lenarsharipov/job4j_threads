@@ -31,8 +31,7 @@ public class ThreadPool {
     /**
      * Конструктор класса ThreadPool. В теле конструктора инициализируется переменная
      * size - количество ядер в системе. Соответственно, в программе будет задействовано
-     * size нитей постоянно.
-     * Далее в цикле создаются новые потоки в количестве равном size
+     * size нитей постоянно. Далее в цикле создаются новые потоки в количестве равном size
      * и они добавляются в очередь и запускаются.
      */
     public ThreadPool() {
@@ -41,7 +40,9 @@ public class ThreadPool {
             var thread = new Thread(
                     () -> {
                         try {
-                            tasks.poll().run();
+                            while (!Thread.currentThread().isInterrupted()) {
+                                tasks.poll().run();
+                            }
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
@@ -58,17 +59,6 @@ public class ThreadPool {
      */
     public void work(Runnable job) throws InterruptedException {
         tasks.offer(job);
-        var thread = new Thread(
-                () -> {
-                    try {
-                        tasks.poll().run();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
-        );
-        threads.add(thread);
-        thread.start();
     }
 
     /**
@@ -84,6 +74,7 @@ public class ThreadPool {
             @Override
             public void run() {
                 System.out.println(Thread.currentThread().getName() + " a".repeat(100));
+                System.out.println("Threads: " + pool.threads.size());
             }
         };
         pool.work(job);
@@ -99,6 +90,7 @@ public class ThreadPool {
         pool.work(job);
         pool.work(job);
 
+        Thread.sleep(3000);
         pool.shutdown();
     }
 
