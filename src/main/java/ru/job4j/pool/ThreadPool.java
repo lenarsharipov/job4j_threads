@@ -29,26 +29,26 @@ public class ThreadPool {
     private final List<Thread> threads = new LinkedList<>();
 
     /**
-     * Приватный вспомогательный метод addAndStartThread(), который создает,
-     * добавляет вновь созданные потоки в очередь и запускает их.
-     */
-    private void addAndStartThread() {
-        var task = new PoolThread(tasks);
-        threads.add(task);
-        task.start();
-    }
-
-    /**
      * Конструктор класса ThreadPool. В теле конструктора инициализируется переменная
      * size - количество ядер в системе. Соответственно, в программе будет задействовано
      * size нитей постоянно.
-     * Далее вызывается вспомогательный метод addAndStartThread(), который создает, 
-     * добавляет вновь созданные потоки в очередь и запускает их.
+     * Далее в цикле создаются новые потоки в количестве равном size
+     * и они добавляются в очередь и запускаются.
      */
     public ThreadPool() {
         int size = Runtime.getRuntime().availableProcessors();
         for (int i = 0; i < size; i++) {
-            addAndStartThread();
+            var thread = new Thread(
+                    () -> {
+                        try {
+                            tasks.poll().run();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+            );
+            threads.add(thread);
+            thread.start();
         }
     }
 
@@ -58,7 +58,17 @@ public class ThreadPool {
      */
     public void work(Runnable job) throws InterruptedException {
         tasks.offer(job);
-        addAndStartThread();
+        var thread = new Thread(
+                () -> {
+                    try {
+                        tasks.poll().run();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+        );
+        threads.add(thread);
+        thread.start();
     }
 
     /**
@@ -68,24 +78,28 @@ public class ThreadPool {
         threads.forEach(Thread::interrupt);
     }
 
-    /**
-     * Статический приватный внутренний класс - модель нити, в метод run(),
-     * которого передается задача из блокирующей очереди.
-     * Переданная задача запускается в ните.
-     */
-    private static class PoolThread extends Thread {
-        SimpleBlockingQueue<Runnable> tasks;
-
-        public PoolThread(SimpleBlockingQueue<Runnable> tasks) {
-            this.tasks = tasks;
-        }
-        @Override
-        public void run() {
-            try {
-                tasks.poll().run();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+    public static void main(String[] args) throws InterruptedException {
+        ThreadPool pool = new ThreadPool();
+        var job = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName() + " a".repeat(100));
             }
-        }
+        };
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+        pool.work(job);
+
+        pool.shutdown();
     }
+
 }
