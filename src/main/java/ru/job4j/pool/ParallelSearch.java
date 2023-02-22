@@ -20,7 +20,7 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
     private int search() {
         int index = -1;
         for (int i = from; i <= to; i++) {
-            if (array[i] == value) {
+            if (value.equals(array[i])) {
                 index = i;
                 break;
             }
