@@ -43,7 +43,7 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-    public static int findIndex(Object[] array, Object value) {
+    public static <T> int findIndex(T[] array, T value) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         return forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, value));
     }
