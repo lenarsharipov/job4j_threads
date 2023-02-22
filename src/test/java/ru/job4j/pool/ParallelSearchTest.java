@@ -1,9 +1,6 @@
 package ru.job4j.pool;
 
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.ForkJoinPool;
-
 import static org.assertj.core.api.Assertions.*;
 
 class ParallelSearchTest {
@@ -13,8 +10,7 @@ class ParallelSearchTest {
         Integer[] array = {
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, 19));
+        int index = ParallelSearch.findIndex(array, 19);
         assertThat(index).isEqualTo(18);
     }
 
@@ -23,8 +19,7 @@ class ParallelSearchTest {
         Integer[] array = {
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, 333));
+        int index = ParallelSearch.findIndex(array, 333);
         assertThat(index).isEqualTo(-1);
     }
 
@@ -33,8 +28,7 @@ class ParallelSearchTest {
         Integer[] array = {
                 1, 2, 3, 4, 5, 6, 7, 8
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, 3));
+        int index = ParallelSearch.findIndex(array, 3);
         assertThat(index).isEqualTo(2);
     }
 
@@ -43,8 +37,7 @@ class ParallelSearchTest {
         Integer[] array = {
                 1, 2, 3, 4, 5, 6, 7, 8
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, 333));
+        int index = ParallelSearch.findIndex(array, 333);
         assertThat(index).isEqualTo(-1);
     }
 
@@ -54,8 +47,7 @@ class ParallelSearchTest {
                 "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
                 "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, "19"));
+        int index = ParallelSearch.findIndex(array, "19");
         assertThat(index).isEqualTo(18);
     }
 
@@ -65,8 +57,7 @@ class ParallelSearchTest {
                 "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
                 "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, "333"));
+        int index = ParallelSearch.findIndex(array, "333");
         assertThat(index).isEqualTo(-1);
     }
 
@@ -75,8 +66,7 @@ class ParallelSearchTest {
         String[] array = {
                 "1", "2", "3", "4", "5", "6", "7", "8"
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, "3"));
+        int index = ParallelSearch.findIndex(array, "3");
         assertThat(index).isEqualTo(2);
     }
 
@@ -85,8 +75,7 @@ class ParallelSearchTest {
         String[] array = {
                 "1", "2", "3", "4", "5", "6", "7", "8"
         };
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int index = forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, "333"));
+        int index = ParallelSearch.findIndex(array, "333");
         assertThat(index).isEqualTo(-1);
     }
 }
